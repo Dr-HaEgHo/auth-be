@@ -3,8 +3,6 @@ const app = express();
 const bodyParser = require("body-parser");
 const dbConnect = require("./db/dbConnect");
 const User = require("./db/userModel");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const auth = require("./auth");
 const passwordService = require("./utils/passwordService");
 const generateToken = require("./utils/generateJWT");
@@ -42,7 +40,7 @@ app.post("/register", async (request, response) => {
   );
 
   const user = new User({
-    email: request.body.email,
+    email: email,
     password: hashedPassword,
   });
 
@@ -64,7 +62,7 @@ app.post("/register", async (request, response) => {
         });
       });
   } else {
-    response.send(500).send({
+    response.status(500).send({
       message: "Password hash failed",
       error,
     });
