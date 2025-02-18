@@ -17,7 +17,6 @@ app.get("/", (request, response, next) => {
 });
 
 dbConnect();
-
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -33,7 +32,7 @@ app.use((req, res, next) => {
 
 app.post("/register", async (request, response) => {
   // destructure the email and password in a variable
-  const { email, password } = request.body;
+  const { email, password, role } = request.body;
   // hash the password
   const { success, error, hashedPassword } = await passwordService.hashPassword(
     password
@@ -42,6 +41,7 @@ app.post("/register", async (request, response) => {
   const user = new User({
     email: email,
     password: hashedPassword,
+    role: role
   });
 
   if (success) {
@@ -125,5 +125,6 @@ app.get("/freepoint", (request, response) => {
 app.get("/authpoint", auth, (request, response) => {
   response.json({ message: "You are authorized to access this endpoint" });
 });
+
 
 module.exports = app;
